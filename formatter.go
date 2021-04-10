@@ -54,6 +54,7 @@ type LogsV1 struct {
 	Level       string                 `json:"l"`
 	Service     string                 `json:"s"`
 	Channel     string                 `json:"c"`
+	ID          string                 `json:"i"`
 	Environment string                 `json:"e"`
 	User        string                 `json:"u"`
 	Message     string                 `json:"m"`
@@ -86,6 +87,7 @@ func (af *LogsV1Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	uid := ""
 	status := ""
 	duration := ""
+	id := ""
 	context := logrus.Fields{}
 	schema := SchemaGeneralLogsV1
 
@@ -107,6 +109,8 @@ func (af *LogsV1Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 			uid = fmt.Sprintf("%v", v)
 		case "status":
 			status = fmt.Sprintf("%v", v)
+		case "id":
+			id, _ = v.(string)
 		case "duration":
 			duration = fmt.Sprintf("%v", v)
 
@@ -132,6 +136,7 @@ func (af *LogsV1Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	data.Service = af.Service
 	data.Channel = channel
 	data.Environment = af.Environment
+	data.ID = id
 	data.Message = entry.Message
 	data.Context = context
 	data.User = uid
