@@ -59,6 +59,7 @@ type LogsV1 struct {
 	User        string                 `json:"u"`
 	Message     string                 `json:"m"`
 	Context     map[string]interface{} `json:"ctx"`
+	Err         string                 `json:"err"`
 	Request     *RequestData           `json:"request,omitempty"`
 }
 
@@ -88,6 +89,7 @@ func (af *LogsV1Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	status := ""
 	duration := ""
 	id := ""
+	errMsg := ""
 	context := logrus.Fields{}
 	schema := SchemaGeneralLogsV1
 
@@ -113,6 +115,9 @@ func (af *LogsV1Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 			id, _ = v.(string)
 		case "duration":
 			duration = fmt.Sprintf("%v", v)
+
+		case "error":
+			errMsg = fmt.Sprintf("%v", v)
 
 		default:
 			if err, ok := v.(error); !ok {
@@ -140,6 +145,7 @@ func (af *LogsV1Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	data.Message = entry.Message
 	data.Context = context
 	data.User = uid
+	data.Err = errMsg
 	defer logsV1Pool.Put(data)
 
 	if rv, ok := entry.Data["request"]; ok {
