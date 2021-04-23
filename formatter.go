@@ -186,21 +186,10 @@ func richRequest(req *http.Request, status, duration string) *RequestData {
 		}
 	}
 
-	// get方式参数
-	if q := req.URL.Query(); len(q) > 0 {
-		for k, v := range q {
-			if len(v) > 1 {
-				request.Param[k] = v
-			} else {
-				request.Param[k] = v[0]
-			}
-		}
-	}
-
+	// From 方式参数
 	if err := req.ParseForm(); err == nil {
-		// postFrom 方式参数
-		if postForm := req.PostForm; len(postForm) > 0 {
-			for k, v := range postForm {
+		if form := req.Form; len(form) > 0 {
+			for k, v := range form {
 				if len(v) > 1 {
 					request.Param[k] = v
 				} else {
