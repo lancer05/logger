@@ -92,8 +92,8 @@ func TestFormatterOutput(t *testing.T) {
 			expected: fmt.Sprintf("%d", http.StatusAccepted),
 		},
 		{
-			path:     []interface{}{"ctx", "error"},
-			expected: `{"msg":"error occurred"}`,
+			path:     []interface{}{"err"},
+			expected: "error occurred",
 		},
 	}
 

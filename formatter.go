@@ -115,10 +115,8 @@ func (af *LogsV1Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 			id, _ = v.(string)
 		case "duration":
 			duration = fmt.Sprintf("%v", v)
-
 		case "error":
 			errMsg = fmt.Sprintf("%v", v)
-
 		default:
 			if err, ok := v.(error); !ok {
 				context[k] = v
